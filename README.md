@@ -1,5 +1,12 @@
 # SCCM_Tool<br>
-Server Routen<br>
+Es muss die Datei dbzugang.js im Hauptverzeichnis liegen.<br>
+Diese muss wiefolgt aussehen<br>
+`module.exports = {
+    datenbank: "dg_sccm",
+    username: "dg",
+    passwort: "Datagroup",
+    port: 3306
+}`<br>
 ## GET Routes<br>
 ### Alle Systeme<br>
 `http://[SERVERADRESS]:3003/api/db/all`<br>
