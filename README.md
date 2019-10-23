@@ -7,6 +7,7 @@ Diese muss wiefolgt aussehen<br>
     passwort: "Datagroup",
     port: 3306
 }`<br>
+Die Angben müssen entsprechend angepasst werden<br>
 ## GET Routes<br>
 ### Alle Systeme<br>
 `http://[SERVERADRESS]:3003/api/db/all`<br>
