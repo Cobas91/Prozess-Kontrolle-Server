@@ -36,6 +36,7 @@ Neuen Datensatz hinzufügen.<br>
 `
 {
 	"table": "systeme",
+	Bemerkung: "",
 	"data": {
 		"SN": "3CG612422",
 		"LSNummer": "2019-87456",
@@ -63,5 +64,28 @@ Einen einzelnen Datensatz abrufen.<br>
 		"SN": "3CG612422"
 	}
  }
+}
+`<br>
+
+### Excel Datensatz importieren<br>
+Ein Excel Datensatz aus KHK importieren<br>
+`http://[SERVERADRESS]:3003/api/db/add/excel`<br>
+#### Syntax<br>
+`
+{
+	"table": "systeme",
+	Bemerkung: "",
+	"data": {
+		"SN": "3CG612422",
+		"LSNummer": "2019-87456",
+		"Status": "Neu Angelegt",
+		"Modell": "850G5",
+		"Kunden_ID": 1,
+		"Betankungs_ID": 2,
+		"Versand_ID": "NULL",
+		"Checklisten_ID_Done": "1",
+		"Lager_ID": 2,
+		"Job_ID": 1
+	}
 }
 `<br>
