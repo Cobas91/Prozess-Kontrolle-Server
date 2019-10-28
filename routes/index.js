@@ -12,7 +12,9 @@ router.use(bodyParser.json());
 
 router.use("/", require("./home.js"));
 router.use("/db", require("./add.js"));
-router.use("/db", require("./get"));
-router.use("/db", require("./update"));
+router.use("/db", require("./get.js"));
+router.use("/db", require("./update.js"));
 router.use("/db", require("./getAll.js"));
+router.use("/db", require("./addExcel.js"))
+router.use("/db", require("./addLog.js"))
 module.exports = router;
