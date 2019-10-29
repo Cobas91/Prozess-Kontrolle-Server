@@ -17,4 +17,5 @@ router.use("/db", require("./update.js"));
 router.use("/db", require("./getAll.js"));
 router.use("/db", require("./addExcel.js"))
 router.use("/db", require("./addLog.js"))
+router.use("/db", require("./getAllStatus.js"))
 module.exports = router;

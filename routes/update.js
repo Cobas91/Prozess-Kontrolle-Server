@@ -8,7 +8,7 @@ router.post("/update", async ({body}, response) => {
   const where = body.where
   const set = body.set
   const result = await db.update(table, set, where)
-  await status.update(where.SN, set.Status)
+  await status.update(set.SN, set.Status)
   response.send({
     result
   })

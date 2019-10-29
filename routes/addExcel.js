@@ -1,7 +1,8 @@
 var express = require("express"),
   router = express.Router();
-  const db = require("../util/dbConnector")
+  const db = require("../util/dbConnector.js")
   const logFile = require("../util/logs.js")
+  const status = require("../util/statusHandler.js")
 
   router.post("/add/excel", async ({body},response) => {
     console.log("Getting Request on db/add")
@@ -24,6 +25,9 @@ var express = require("express"),
           const result = await db.insert("systeme", [system]).catch(function (err) {    
             return err
           });
+          if(result.statusCode != 400){
+            status.update(system.SN, system.Status)
+          }
           erg[counter] = result
           logFile.add(result)
           counter++
