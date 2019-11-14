@@ -9,6 +9,10 @@ router.post("/update", async ({body}, response) => {
   const set = body.set
   const result = await db.update(table, set, where)
   await status.update(set.SN, set.Status)
+  if(set.Bemerkung != ""){
+    await status.update(set.SN, "Bemerkung hinzugefügt")
+    await db.insert("comments_systeme", {system_ID: set.ID, comment: set.Bemerkung})
+  }
   response.send({
     result
   })

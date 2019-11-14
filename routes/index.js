@@ -19,4 +19,5 @@ router.use("/db", require("./addExcel.js"))
 router.use("/db", require("./addLog.js"))
 router.use("/db", require("./getAllStatus.js"))
 router.use("/db", require("./pxeReset.js"))
+router.use("/db", require("./getStatus.js"))
 module.exports = router;
