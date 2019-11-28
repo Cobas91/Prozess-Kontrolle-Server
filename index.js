@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 //Muss letzter Part sein
 app.use("/api", require("./routes/index.js"));
 app.listen(port, async function () {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Server listening on port ${port}`);
 });
 
 
