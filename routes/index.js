@@ -21,4 +21,5 @@ router.use("/db", require("./getAllStatus.js"))
 router.use("/db", require("./pxeReset.js"))
 router.use("/db", require("./getStatus.js"))
 router.use("/db", require("./getCheckliste.js"))
+router.use("/db", require("./addChecklisteSN.js"))
 module.exports = router;
