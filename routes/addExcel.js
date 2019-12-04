@@ -17,10 +17,7 @@ var express = require("express"),
             Modell: body[index].Matchcode,
             Hersteller: "Unbekannt",
             Kunde: "Unbekannt",
-            Betankungs_ID: 0,
-            Versand_ID: "NULL",
-            Lager_KHK: body[index].Lagerplatz,
-            Job_ID: 0
+            Lager_KHK: body[index].Lagerplatz
           }
           const result = await db.insert("systeme", [system]).catch(function (err) {    
             return err
