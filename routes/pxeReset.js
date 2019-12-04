@@ -6,11 +6,13 @@ var express = require("express"),
   router.post("/pxeReset", async ({body},response) => {
     const data = body.data
     console.log("Getting Request on db/pxeReset", body)
-    await status.update(data.SN, "Zurücksetzen")
+    status.update(data.SN, "Zurücksetzen")
+    const result = await db.insert("pxereset", [data]).catch(function (err) {
+      return err
+    });
     response.send({
       result
     });
-    error = false;
   });
 
   module.exports = router;
