@@ -22,4 +22,6 @@ router.use("/db", require("./pxeReset.js"))
 router.use("/db", require("./getStatus.js"))
 router.use("/db", require("./getCheckliste.js"))
 router.use("/db", require("./addChecklisteSN.js"))
+router.use("/db", require("./getAllChecklisten.js"))
+router.use("/", require("./createpdf.js"))
 module.exports = router;

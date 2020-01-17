@@ -1,18 +1,18 @@
-function convert(UNIX_timestamp) {
+function convert(UNIX_timestamp, format) {
   var a = new Date(UNIX_timestamp);
   var months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec"
+    "Januar",
+    "Februar",
+    "März",
+    "April",
+    "Mai",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "Dezember"
   ];
   var year = a.getFullYear();
   var month = months[a.getMonth()];
@@ -23,7 +23,20 @@ function convert(UNIX_timestamp) {
   if (sec < 10) {
     sec = ("0" + sec).slice(-2);
   }
-  var time = `${date} ${month} ${year} - ${hour}:${min}:${sec}`;
+  var time;
+  switch(format){
+    case "DD MM JJ":
+      time = `${date}.${month}.${year}`
+      break;
+    case "DD MM":
+      time = `${date}.${month}`
+      break;
+    case "DD MM JJ mm":
+      time = `${date}.${month}.${year} - ${hour}:${min}:${sec}`
+      break;
+
+  }
+
   return time;
 }
 module.exports = { convert };
