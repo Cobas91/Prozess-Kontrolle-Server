@@ -34,6 +34,9 @@ function convert(UNIX_timestamp, format) {
     case "DD MM JJ mm":
       time = `${date}.${month}.${year} - ${hour}:${min}:${sec}`
       break;
+      case "DD MM HH mm":
+      time = `${date}.${month}.${year} - ${hour}:${min} Uhr`
+      break;
 
   }
 
