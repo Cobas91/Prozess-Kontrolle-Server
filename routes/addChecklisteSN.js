@@ -1,6 +1,7 @@
 var express = require("express"),
   router = express.Router();
   const db = require("../util/dbConnector")
+  const log = require("../util/logs.js")
 
   router.post("/add/checklisteSN", async ({body},response) => {
     body.timestamp = Date.now()
@@ -10,9 +11,11 @@ var express = require("express"),
     });
     if(result.statusCode === 400){
       await db.update("checklisten", body).catch(function (err) {
-        console.log(err)
+        log.add(`Updated Checkliste for ${body.Seriennummer}`)
       });
-    }
+    }else{
+      log.add(`Added Checkliste for ${body.Seriennummer}`)
+    }    
     response.send({
       result
     });

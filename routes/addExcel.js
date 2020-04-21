@@ -26,7 +26,7 @@ var express = require("express"),
             status.update(system.SN, system.Status)
           }
           erg[counter] = result
-          logFile.add(result)
+          logFile.add(`KHK import, Data already exist ${body[index].Seriennummer}`)
           counter++
     }
     console.log("Stopped looping.... "+new Date().toLocaleString())
