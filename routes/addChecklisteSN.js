@@ -10,7 +10,7 @@ var express = require("express"),
       return err
     });
     if(result.statusCode === 400){
-      await db.update("checklisten", body).catch(function (err) {
+      await db.update("checklisten", body, {Seriennummer: body.Seriennummer}).catch(function (err) {
         log.add(`Updated Checkliste for ${body.Seriennummer}`)
       });
     }else{
