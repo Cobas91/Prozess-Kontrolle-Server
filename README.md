@@ -89,3 +89,23 @@ Ein Excel Datensatz aus KHK importieren<br>
 	}
 }
 `<br>
+### CHeckliste zu Gerät hinzufügen/bearbeiten<br>
+Einem System Checklisten Parameter hinzufügen. Wenn bereits eine Checkliste besteht wird diese Updated.<br>
+`http://[SERVERADRESS]:3003/api/db/add/checklisteSN`<br>
+#### Syntax<br>
+`
+{
+	"table": "checklisten",
+	{
+        Seriennummer: system.Seriennummer,
+        SCCM_Anlage: system.SCCM_Anlage,
+        PXE_Start: system.PXE_Start,
+        Bootstick_Start: system.Bootstick_Start,
+        Bemerkung: system.Bemerkung,
+        Computername: system.Computername,
+        Software: system.Software,
+        BIOS: system.BIOS,
+        timestamp: system.timestamp  
+    }
+}
+`<br>
