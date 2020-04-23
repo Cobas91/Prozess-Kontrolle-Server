@@ -5,6 +5,8 @@ const port = 3003;
 var path = require("path");
 const bodyParser = require('body-parser')
 
+const job = require("./util/khkDailyImport.js")
+
 global.appRoot = path.resolve(__dirname);
 
 app.use(function(req, res, next) {
