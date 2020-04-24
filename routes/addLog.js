@@ -5,7 +5,6 @@ var express = require("express"),
 
   router.post("/add/log", async ({body},response) => {
     const data = body.data
-    console.log("Getting Request for Logs", data)
     const result = await db.insert("db_logs", [data]).catch(function (err) {
       error = true;
       return err

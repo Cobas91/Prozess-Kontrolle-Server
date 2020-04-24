@@ -57,7 +57,6 @@ var express = require("express"),
 
   router.post("/create/pdf", async ({body},res) => {
     var filename = await PDF(body);
-    console.log("File to download", filename)
     var downloadPath = appDir.substring(2) + "\\downloads\\" + filename
     console.log(downloadPath)
     setTimeout(function(){

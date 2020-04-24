@@ -5,7 +5,6 @@ var express = require("express"),
   const status = require("../util/statusHandler.js")
 
   router.post("/add/excel", async ({body},response) => {
-    console.log("Getting Request on db/add")
     var erg = []
     var counter = 0;
     console.log("Begin Loop over all incomming Data "+new Date().toLocaleString())

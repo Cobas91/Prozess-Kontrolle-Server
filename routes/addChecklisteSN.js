@@ -5,7 +5,6 @@ var express = require("express"),
 
   router.post("/add/checklisteSN", async ({body},response) => {
     body.timestamp = Date.now()
-    console.log("Getting Request for Adding Checkliste", body)
     const result = await db.insert("checklisten", [body]).catch(function (err) {
       return err
     });
