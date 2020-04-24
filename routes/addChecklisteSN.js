@@ -4,14 +4,15 @@ var express = require("express"),
   const log = require("../util/logs.js")
 
   router.post("/add/checklisteSN", async ({body},response) => {
-    body.timestamp = Date.now()
+    delete body.timestamp
     const result = await db.insert("checklisten", [body]).catch(function (err) {
       return err
     });
     if(result.statusCode === 400){
-      await db.update("checklisten", body, {Seriennummer: body.Seriennummer}).catch(function (err) {
+      var updateResult = await db.update("checklisten", body, {Seriennummer: body.Seriennummer}).catch(function (err) {
         log.add(`Updated Checkliste for ${body.Seriennummer}`)
       });
+      console.log(updateResult)
     }else{
       log.add(`Added Checkliste for ${body.Seriennummer}`)
     }    
