@@ -87,6 +87,7 @@ async function dealExcelDataLieferscheine(pfad){
       Kunde_KHK: row.Kunde,
       Bearbeiter: "Admin"
     }
+    log.add(`Job: Daily KHK Lieferscheine Update Asset ${row.Seriennummer}`)
     db.update("systeme", toInsert, {SN: row.Seriennummer})
   })
   .on('end', async () => {
