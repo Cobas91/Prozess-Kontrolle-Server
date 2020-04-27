@@ -1,11 +1,13 @@
 const cronJob = require('node-schedule');
+const config = require('../config.json')
 var fs = require('fs');
 const log = require("./logs.js")
 const xlsx = require('node-xlsx')
 const db = require("../util/dbConnector")
 const status = require("../util/statusHandler.js")
-const fileName= "rptAbfDataSerienNr"
-const filepath = `./khk_import/${fileName}.xlsx`
+const csv = require('csv-parser');
+
+const filepath = `${config.Lagerbestand_Import.pfad}${config.Lagerbestand_Import.file}`
 
 
 // *    *    *    *    *    *
@@ -18,23 +20,21 @@ const filepath = `./khk_import/${fileName}.xlsx`
 // │    └──────────────────── minute (0 - 59)
 // └───────────────────────── second (0 - 59, OPTIONAL)
 
-//Jeden morgen um 6 Uhr ausführen
-cronJob.scheduleJob('0 27 13 * * *', function(){
-    console.log("Aufgabe KHK Import gestartet.")
-    khkimport();
+cronJob.scheduleJob(`${config.Daily_Job_Uhrzeit.sekunde} ${config.Daily_Job_Uhrzeit.minute} ${config.Daily_Job_Uhrzeit.stunde} * * *`, function(){
+    console.log(`Aufgabe KHK Import um ${config.Daily_Job_Uhrzeit.stunde}:${config.Daily_Job_Uhrzeit.minute} Uhr gestartet.`)
+    khkimportLager(filepath);
 });
 
-async function dealExcelData(){
-    const workSheetsFromFile = xlsx.parse(filepath);
-    const test = Object.assign({}, workSheetsFromFile[0].data)
-    //console.log(test)
-    var body = test
-    console.log("Begin Loop over all incomming Data "+new Date().toLocaleString())
+async function dealExcelDataLager(pfad){
+    const workSheetsFromFile = xlsx.parse(pfad);
+    const Data = Object.assign({}, workSheetsFromFile[0].data)
+    var body = Data
+    console.log("Begin Loop over all incomming Lager Data "+new Date().toLocaleString())
     // 0 = Artikelnummer
     // 1 = Matchcode
     // 2 = Lager
     // 3 = Seriennummer
-    log.add(`Job: Daily KHK Import started......${new Date().toLocaleString()}`)
+    log.add(`Job: Daily KHK Lager Import started......${new Date().toLocaleString()}`)
     for(var index in body){
       if(index > 0){
         var system= {
@@ -51,30 +51,80 @@ async function dealExcelData(){
         });
         if(result.statusCode != 400){
           status.update(system.SN, system.Status)
+          log.add(`Job: Daily KHK Lager Import ${system.SN} added`)
+        }else{
+          db.update("systeme", {
+            Modell: body[index][1],
+            Lager_KHK: body[index][2]
+          }, {SN: system.SN})
+          log.add(`Job: Daily KHK Lager Import ${body[index][3]} already exists, updated Asset with new Data`)
         }
-        log.add(`Job: Daily KHK Import error ${body[index][3]} already exists`)
       }
     }
-    log.add(`Job: Daily KHK Import ended......${new Date().toLocaleString()}`)
-    console.log("Stop Loop over all incomming Data "+new Date().toLocaleString())
+    log.add(`Job: Daily KHK Lager Import ended......${new Date().toLocaleString()}`)
+    console.log("Stop Loop over all incomming Lager Data "+new Date().toLocaleString())
+    return true
 }
-
-function khkimport(){
-    const path = `./khk_import/${fileName}.xlsx`
+async function dealExcelDataLieferscheine(pfad){
+  console.log("Begin Loop over all incomming Lieferscheine Data "+new Date().toLocaleString())
+  var header = [
+    "Artikelnummer",
+    "Seriennummer",
+    "Belegdatum",
+    "KundenID",
+    "Kunde",
+    "Jahr",
+    "LSNummer",
+    "Belegart",
+    "Liefertermin"
+  ]
+  fs.createReadStream(pfad)
+  .pipe(csv({ separator: ';' , headers: header}))
+  .on('data',(row) => {
+    var toInsert = {
+      SN: row.Seriennummer,
+      LSNummer: `${row.Jahr}-${row.LSNummer}`,
+      Kunde_KHK: row.Kunde,
+      Bearbeiter: "Admin"
+    }
+    db.update("systeme", toInsert, {SN: row.Seriennummer})
+  })
+  .on('end', async () => {
+    console.log("Stop Loop over all incomming Lieferscheine Data "+new Date().toLocaleString())
+  });
+  
+}
+async function khkimportLager(pfad){
     try {
-        if (fs.existsSync(path)) {
-            log.add(`Job: Daily KHK Import started...`)
-            dealExcelData()
+        if (fs.existsSync(pfad)) {
+            log.add(`Job: Daily KHK Lager Import started...`)
+            return await dealExcelDataLager(pfad)
         }else{
             //in DB Logs schreiben
-            log.add(`Job: Daily KHK Import failed: File did not exist!`)
+            log.add(`Job: Daily KHK Lager Import failed: File did not exist!`)
+            return false
         }
       } catch(err) {
-        console.log("err")
+        return false
+    }
+}
+
+async function khkImportLieferscheine(pfad){
+    try {
+      if (fs.existsSync(pfad)) {
+          log.add(`Job: Daily KHK Lieferscheine Import started...`)
+          return await dealExcelDataLieferscheine(pfad)
+      }else{
+          //in DB Logs schreiben
+          log.add(`Job: Daily KHK Lieferscheine Import failed: File did not exist!`)
+          return false
       }
+    } catch(err) {
+      return false
+  }
 }
 
 
 
 
-module.exports = { khkimport };
+module.exports = { khkimportLager, khkImportLieferscheine };

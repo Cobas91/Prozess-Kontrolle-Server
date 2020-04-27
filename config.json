@@ -1,0 +1,15 @@
+{
+    "Daily_Job_Uhrzeit":{
+        "stunde": "13",
+        "minute": "54",
+        "sekunde": "0"
+    },
+    "Lagerbestand_Import": {
+        "file": "Lagerbestand.xlsx",
+        "pfad": "Z:/Tool_Export/KHK_Import/" 
+    },
+    "Lieferschein_Import":{
+        "file": "Lieferscheine.csv",
+        "pfad": "Z:/Tool_Export/KHK_Import/" 
+    }
+}
