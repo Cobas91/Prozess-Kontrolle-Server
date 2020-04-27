@@ -88,7 +88,9 @@ async function dealExcelDataLieferscheine(pfad){
       Bearbeiter: "Admin"
     }
     log.add(`Job: Daily KHK Lieferscheine Update Asset ${row.Seriennummer}`)
-    db.update("systeme", toInsert, {SN: row.Seriennummer})
+    db.update("systeme", toInsert, {SN: row.Seriennummer}).catch(function (err) {
+      log.add(`Job: Daily KHK Lieferscheine Error ${err}`)
+    });
   })
   .on('end', async () => {
     console.log("Stop Loop over all incomming Lieferscheine Data "+new Date().toLocaleString())
