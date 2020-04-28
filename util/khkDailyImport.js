@@ -7,8 +7,8 @@ const db = require("../util/dbConnector")
 const status = require("../util/statusHandler.js")
 const csv = require('csv-parser');
 
-const filepath = `${config.Lagerbestand_Import.pfad}${config.Lagerbestand_Import.file}`
-
+const filepathLagerbestand = `${config.Lagerbestand_Import.pfad}${config.Lagerbestand_Import.file}`
+const filepathLieferscheine = `${config.Lieferschein_Import.pfad}${config.Lieferschein_Import.file}`
 
 // *    *    *    *    *    *
 // ┬    ┬    ┬    ┬    ┬    ┬
@@ -20,9 +20,11 @@ const filepath = `${config.Lagerbestand_Import.pfad}${config.Lagerbestand_Import
 // │    └──────────────────── minute (0 - 59)
 // └───────────────────────── second (0 - 59, OPTIONAL)
 
-cronJob.scheduleJob(`${config.Daily_Job_Uhrzeit.sekunde} ${config.Daily_Job_Uhrzeit.minute} ${config.Daily_Job_Uhrzeit.stunde} * * *`, function(){
+//Automatischer Import von Daten -> 
+cronJob.scheduleJob(`${config.Daily_Job_Uhrzeit.sekunde} ${config.Daily_Job_Uhrzeit.minute} ${config.Daily_Job_Uhrzeit.stunde} * * *`, async function(){
     console.log(`Aufgabe KHK Import um ${config.Daily_Job_Uhrzeit.stunde}:${config.Daily_Job_Uhrzeit.minute} Uhr gestartet.`)
-    khkimportLager(filepath);
+    await khkimportLager(filepathLagerbestand);
+    await khkImportLieferscheine(filepathLieferscheine)
 });
 
 async function dealExcelDataLager(pfad){
@@ -34,7 +36,6 @@ async function dealExcelDataLager(pfad){
     // 1 = Matchcode
     // 2 = Lager
     // 3 = Seriennummer
-    log.add(`Job: Daily KHK Lager Import started......${new Date().toLocaleString()}`)
     for(var index in body){
       if(index > 0){
         var system= {
@@ -83,23 +84,19 @@ async function dealExcelDataLieferscheine(pfad){
   .on('data',(row) => {
     var toInsert = {
       SN: row.Seriennummer,
+      Artikelnummer: row.Artikelnummer,
       LSNummer: `${row.Jahr}-${row.LSNummer}`,
       Kunde_KHK: row.Kunde,
       Bearbeiter: "Admin"
     }
-    
-    
     db.update("systeme", toInsert, {SN: row.Seriennummer}).catch(function (err) {
       log.add(`Job: Daily KHK Lieferscheine Error ${err}`)
-    }).then(()=>{
-      console.log("Update Lieferschein Asset", row.Seriennummer)
-      log.add(`Job: Daily KHK Lieferscheine Update Asset ${row.Seriennummer}`)
-    });
+    })
+    log.add(`Job: Daily KHK Lieferscheine Update Asset ${row.Seriennummer}`)
   })
   .on('end', async () => {
-    console.log("Stop Loop over all incomming Lieferscheine Data "+new Date().toLocaleString())
+    
   });
-  
 }
 async function khkimportLager(pfad){
     try {
