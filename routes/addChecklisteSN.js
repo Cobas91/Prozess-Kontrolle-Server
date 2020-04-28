@@ -8,11 +8,11 @@ var express = require("express"),
     const result = await db.insert("checklisten", [body]).catch(function (err) {
       return err
     });
+    console.log(body)
     if(result.statusCode === 400){
       var updateResult = await db.update("checklisten", body, {Seriennummer: body.Seriennummer}).catch(function (err) {
         log.add(`Updated Checkliste for ${body.Seriennummer}`)
       });
-      console.log(updateResult)
     }else{
       log.add(`Added Checkliste for ${body.Seriennummer}`)
     }    
