@@ -17,4 +17,5 @@ router.use("/db", require("./getCheckliste.js"))
 router.use("/db", require("./addChecklisteSN.js"))
 router.use("/db", require("./getAllChecklisten.js"))
 router.use("/import", require("./importKHKData.js"))
+router.use("/db", require("./updateStatus.js"));
 module.exports = router;
