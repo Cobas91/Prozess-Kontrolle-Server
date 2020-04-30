@@ -12,21 +12,27 @@ router.post("/massStatus", async ({body},response) => {
 
     var notFound = []
     var found = []
-    for (var property in systeme) {
-        if (systeme.hasOwnProperty(property)) {
-            var systemToInsert = systeme[property]
-            exist = await db.select("systeme", {SN: systemToInsert});
-            if(exist.length > 0){
-                status.update(systemToInsert, statusToSet)
-                found.push(systemToInsert)
-            }else{
-                notFound.push(systemToInsert)
-            } 
+    var message = "success"
+    if(statusToSet === ""){
+        message = "Kein Status ausgewählt!"
+    }else{
+        for (var property in systeme) {
+            if (systeme.hasOwnProperty(property)) {
+                var systemToInsert = systeme[property]
+                exist = await db.select("systeme", {SN: systemToInsert});
+                if(exist.length > 0){
+                    status.update(systemToInsert, statusToSet)
+                    found.push(systemToInsert)
+                }else{
+                    notFound.push(systemToInsert)
+                } 
+            }
         }
     }
     response.send({
         success: found,
-        error: notFound
+        error: notFound,
+        message: message
     });
 });
 module.exports = router;
