@@ -35,9 +35,7 @@ router.post("/update", async ({body}, response) => {
     response.send({
       result
     })
-  }
- 
-  
+  }  
 });
 
 module.exports = router;

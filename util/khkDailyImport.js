@@ -81,21 +81,45 @@ async function dealExcelDataLieferscheine(pfad){
   ]
   fs.createReadStream(pfad)
   .pipe(csv({ separator: ';' , headers: header}))
-  .on('data',(row) => {
-    var toInsert = {
-      SN: row.Seriennummer,
-      Artikelnummer: row.Artikelnummer,
-      LSNummer: `${row.Jahr}-${row.LSNummer}`,
-      Kunde_KHK: row.Kunde,
-      Bearbeiter: "Admin"
-    }
-    db.update("systeme", toInsert, {SN: row.Seriennummer}).catch(function (err) {
-      log.add(`Job: Daily KHK Lieferscheine Error ${err}`)
-    })
-    log.add(`Job: Daily KHK Lieferscheine Update Asset ${row.Seriennummer}`)
+  .on('data',async (row) => {
+    if(row.Belegart === "Lieferschein"){
+      var toInsert = {
+        SN: row.Seriennummer,
+        Artikelnummer: row.Artikelnummer,
+        LSNummer: `${row.Jahr}-${row.LSNummer}`,
+        Kunde_KHK: row.Kunde,
+        Bearbeiter: "Admin"
+      }
+        var systemToInsert = await db.select("systeme", {SN: row.Seriennummer});
+        if(systemToInsert.length < 1){
+
+          //WENN GERÄT NICHT GEFUNDEN WURDE NEU ANLEGEN???
+          //ASSET MÜLL
+          //Benötige in Lieferschein Export Modell Namen -> Artikelnummer zu Modellname
+
+          // var newSystem = {
+          //   SN: row.Seriennummer,
+          //   LSNummer: `${row.Jahr}-${row.LSNummer}`,
+          //   Status: "Neu Angelegt",
+          //   Modell: "Unbekannt",
+          //   Kunde_KHK: row.Kunde,
+          //   Bearbeiter: "Admin",
+          //   Artikelnummer: row.Artikelnummer,
+          // }
+          // var newResult = await db.insert("systeme", [newSystem]).catch(function (err) {
+          //   log.add(`Job: Daily KHK Lieferscheine Error ${err}`)
+          // });
+          // log.add(`Job: Daily KHK Lieferscheine Added New Asset ${row.Seriennummer}`)
+        }else{
+          var updateResult = await db.update("systeme", toInsert, {SN: row.Seriennummer}).catch(function (err) {
+            log.add(`Job: Daily KHK Lieferscheine Error ${err}`)
+          })
+          log.add(`Job: Daily KHK Lieferscheine Update Asset ${row.Seriennummer}`)
+        }
+    }  
   })
   .on('end', async () => {
-    
+    console.log("Stop Loop over all incomming Lieferscheine Data "+new Date().toLocaleString())
   });
 }
 async function khkimportLager(pfad){

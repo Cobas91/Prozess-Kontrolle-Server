@@ -89,7 +89,7 @@ Ein Excel Datensatz aus KHK importieren<br>
 	}
 }
 `<br>
-### CHeckliste zu Gerät hinzufügen/bearbeiten<br>
+### Checkliste zu Gerät hinzufügen/bearbeiten<br>
 Einem System Checklisten Parameter hinzufügen. Wenn bereits eine Checkliste besteht wird diese Updated.<br>
 `http://[SERVERADRESS]:3003/api/db/add/checklisteSN`<br>
 #### Syntax<br>
