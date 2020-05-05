@@ -27,6 +27,55 @@ cronJob.scheduleJob(`${config.Daily_Job_Uhrzeit.sekunde} ${config.Daily_Job_Uhrz
     await khkImportLieferscheine(filepathLieferscheine)
 });
 
+cronJob.scheduleJob(`${config.PowerBI.time.sekunde} ${config.PowerBI.time.minute} ${config.PowerBI.time.stunde} * * *`, async function(){
+  console.log(`Aufgabe PowerBI export um ${config.PowerBI.time.stunde}:${config.PowerBI.time.minute} Uhr gestartet.`)
+  await exportPowerBI();
+});
+
+async function exportPowerBI(){
+  const checklisten = config.PowerBI.checklisten
+  const systeme = config.PowerBI.systeme
+  const status = config.PowerBI.status
+
+  // Checklisten
+  var query_checklisten = `
+  SELECT ${checklisten.header} UNION ALL 
+  SELECT * FROM ${checklisten.table} INTO OUTFILE '${checklisten.pfad}${checklisten.file}' FIELDS TERMINATED BY '${checklisten.query.Fields_Termitated}' ENCLOSED BY '${checklisten.query.Enclosed_By}' ESCAPED BY '${checklisten.query.Escaped_by}' LINES TERMINATED BY '${checklisten.query.Lines_Terminated}'
+  ` 
+  var erg_checklisten = await db.query(query_checklisten)
+    .then(function (res) {
+      fs.createReadStream(`${checklisten.pfad}${checklisten.file}`).pipe(fs.createWriteStream(`${checklisten.pfad}${checklisten.powerBIFIle}`));
+      fs.unlinkSync(`${checklisten.pfad}${checklisten.file}`)
+      log.add(`Job: PowerBI Export Checklisten done `+new Date().toLocaleString())
+  });
+
+  // Systeme
+  var query_systeme = `
+  SELECT ${systeme.header} UNION ALL 
+  SELECT * FROM ${systeme.table} INTO OUTFILE '${systeme.pfad}${systeme.file}' FIELDS TERMINATED BY '${systeme.query.Fields_Termitated}' ENCLOSED BY '${systeme.query.Enclosed_By}' ESCAPED BY '${systeme.query.Escaped_by}' LINES TERMINATED BY '${systeme.query.Lines_Terminated}'
+  `
+  var erg_systeme = await db.query(query_systeme)
+    .then(function (res) {
+      fs.createReadStream(`${systeme.pfad}${systeme.file}`).pipe(fs.createWriteStream(`${systeme.pfad}${systeme.powerBIFIle}`));
+      fs.unlinkSync(`${systeme.pfad}${systeme.file}`)
+      log.add(`Job: PowerBI Export Systeme done `+new Date().toLocaleString())
+  });
+
+  // Status
+  var query_status = `
+  SELECT ${status.header} UNION ALL 
+  SELECT * FROM ${status.table} INTO OUTFILE '${status.pfad}${status.file}' FIELDS TERMINATED BY '${status.query.Fields_Termitated}' ENCLOSED BY '${status.query.Enclosed_By}' ESCAPED BY '${status.query.Escaped_by}' LINES TERMINATED BY '${status.query.Lines_Terminated}'
+  `
+  var erg_status = await db.query(query_status)
+    .then(function (res) {
+      fs.createReadStream(`${status.pfad}${status.file}`).pipe(fs.createWriteStream(`${status.pfad}${status.powerBIFIle}`));
+      fs.unlinkSync(`${status.pfad}${status.file}`)
+      log.add(`Job: PowerBI Export Status done `+new Date().toLocaleString())
+  });
+
+
+}
+
 async function dealExcelDataLager(pfad){
     const workSheetsFromFile = xlsx.parse(pfad);
     const Data = Object.assign({}, workSheetsFromFile[0].data)
@@ -155,4 +204,4 @@ async function khkImportLieferscheine(pfad){
 
 
 
-module.exports = { khkimportLager, khkImportLieferscheine };
+module.exports = { khkimportLager, khkImportLieferscheine, exportPowerBI };
