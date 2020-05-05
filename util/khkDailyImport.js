@@ -44,7 +44,7 @@ async function exportPowerBI(){
   ` 
   var erg_checklisten = await db.query(query_checklisten)
     .then(function (res) {
-      fs.createReadStream(`${checklisten.pfad}${checklisten.file}`).pipe(fs.createWriteStream(`${checklisten.pfad}${checklisten.powerBIFIle}`));
+      fs.createReadStream(`${checklisten.pfad}${checklisten.file}`).pipe(fs.createWriteStream(`${checklisten.pfad}${checklisten.powerBIFile}`));
       fs.unlinkSync(`${checklisten.pfad}${checklisten.file}`)
       log.add(`Job: PowerBI Export Checklisten done `+new Date().toLocaleString())
   });
@@ -56,7 +56,7 @@ async function exportPowerBI(){
   `
   var erg_systeme = await db.query(query_systeme)
     .then(function (res) {
-      fs.createReadStream(`${systeme.pfad}${systeme.file}`).pipe(fs.createWriteStream(`${systeme.pfad}${systeme.powerBIFIle}`));
+      fs.createReadStream(`${systeme.pfad}${systeme.file}`).pipe(fs.createWriteStream(`${systeme.pfad}${systeme.powerBIFile}`));
       fs.unlinkSync(`${systeme.pfad}${systeme.file}`)
       log.add(`Job: PowerBI Export Systeme done `+new Date().toLocaleString())
   });
@@ -68,7 +68,7 @@ async function exportPowerBI(){
   `
   var erg_status = await db.query(query_status)
     .then(function (res) {
-      fs.createReadStream(`${status.pfad}${status.file}`).pipe(fs.createWriteStream(`${status.pfad}${status.powerBIFIle}`));
+      fs.createReadStream(`${status.pfad}${status.file}`).pipe(fs.createWriteStream(`${status.pfad}${status.powerBIFile}`));
       fs.unlinkSync(`${status.pfad}${status.file}`)
       log.add(`Job: PowerBI Export Status done `+new Date().toLocaleString())
   });
