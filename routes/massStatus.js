@@ -9,7 +9,7 @@ var express = require("express"),
 router.post("/massStatus", async ({body},response) => {
     const statusToSet = body.status
     const systeme = body.systeme
-
+    const bemerkung = body.bemerkung
     var notFound = []
     var found = []
     var message = "success"
@@ -22,6 +22,8 @@ router.post("/massStatus", async ({body},response) => {
                 exist = await db.select("systeme", {SN: systemToInsert});
                 if(exist.length > 0){
                     status.update(systemToInsert, statusToSet)
+                    db.insert("comments_systeme", {system_ID: exist[0].ID, comment: bemerkung})
+                    db.update("systeme", {Bemerkung: bemerkung}, {SN: systemToInsert})
                     found.push(systemToInsert)
                 }else{
                     notFound.push(systemToInsert)
