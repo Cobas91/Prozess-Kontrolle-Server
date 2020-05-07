@@ -21,4 +21,5 @@ router.use("/db", require("./updateStatus.js"));
 router.use("/db", require("./massStatus.js"));
 router.use("/cfg", require("./getConfig.js"));
 router.use("/cfg", require("./setConfig.js"));
+router.use("/db", require("./getDBlogs.js"));
 module.exports = router;
