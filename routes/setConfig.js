@@ -33,7 +33,12 @@ router.post("/set", async (request, response) => {
     var PowerBI_Status_file = PowerBI_Status_array[PowerBI_Status_array.length -1]
     var PowerBI_Status_pfad = body.powerbi_status_pfad.replace(PowerBI_Status_file, "")
 
+    //Teams
+    var Teams_DailyFeedBack_Channel = body.teams_daily_channel
+    var Teams_DailyFeedBack_Uhrzeit = body.teams_daily_time.split(":")
+
     newConfig = {
+        ...config,
         Daily_Job_Uhrzeit:{
             stunde: Daily_Uhrzeit[0],
             minute: Daily_Uhrzeit[1],
@@ -70,7 +75,17 @@ router.post("/set", async (request, response) => {
             }
     
         },
-        ...config
+        teams: {
+            ...config.teams,
+            dailyFeedback:{
+                time:{
+                    stunde: Teams_DailyFeedBack_Uhrzeit[0],
+                    minute: Teams_DailyFeedBack_Uhrzeit[1],
+                    sekunde: Teams_DailyFeedBack_Uhrzeit[2]
+                },
+                channel: Teams_DailyFeedBack_Channel
+            },
+        },
     }
     //Error Handling! TODO
     fs.writeFileSync("./config.json", JSON.stringify(newConfig));
