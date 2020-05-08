@@ -22,4 +22,6 @@ router.use("/db", require("./massStatus.js"));
 router.use("/cfg", require("./getConfig.js"));
 router.use("/cfg", require("./setConfig.js"));
 router.use("/db", require("./getDBlogs.js"));
+router.use("/db", require("./sendMessageTeams.js"));
+router.use("/db", require("./getVersandReady.js"));
 module.exports = router;

@@ -69,7 +69,8 @@ router.post("/set", async (request, response) => {
                 pfad: PowerBI_Status_pfad,
             }
     
-        }
+        },
+        ...config
     }
     //Error Handling! TODO
     fs.writeFileSync("./config.json", JSON.stringify(newConfig));
