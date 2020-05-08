@@ -35,7 +35,7 @@ cronJob.scheduleJob(`${config.PowerBI.time.sekunde} ${config.PowerBI.time.minute
 
 cronJob.scheduleJob(`${config.teams.dailyFeedback.time.sekunde} ${config.teams.dailyFeedback.time.minute} ${config.teams.dailyFeedback.time.stunde} * * *`, async function(){
   console.log(`Status Update an Teams gesendet ${config.teams.dailyFeedback.time.stunde}:${config.teams.dailyFeedback.time.minute} Uhr.`)
-  await dailyFeedback("Dev")
+  await dailyFeedback(config.teams.dailyFeedback.channel)
 });
 
 async function exportPowerBI(){
