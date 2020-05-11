@@ -1,44 +1,42 @@
-var request = require("request")
-const config = require('../config.json')
+var request = require("request");
+const config = require("../config.json");
 
-async function sendDailyFeedback(data, channel){
-    var clientServerOptions = {
-        uri: config.teams.channels[channel],
-        body: JSON.stringify(data),
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
+async function sendDailyFeedback(data, channel) {
+  var clientServerOptions = {
+    uri: config.teams.channels[channel],
+    body: JSON.stringify(data),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  request(clientServerOptions, function (error, response) {
+    if (error) {
+      return error;
+    } else {
+      return response.body;
     }
-    request(clientServerOptions, function (error, response) {
-        if(error){
-            return error
-        }else{
-            return response.body
-        }
-    });
-    return true
+  });
+  return true;
 }
 
-function versandReady(data, channel){
-    var clientServerOptions = {
-        uri: config.teams.channels[channel],
-        body: JSON.stringify(data),
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
+function versandReady(data, channel) {
+  var clientServerOptions = {
+    uri: config.teams.channels[channel],
+    body: JSON.stringify(data),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  request(clientServerOptions, function (error, response) {
+    if (error) {
+      return error;
+    } else {
+      return response.body;
     }
-    request(clientServerOptions, function (error, response) {
-        if(error){
-            return error
-        }else{
-            return response.body
-        }
-    });
-    return true
+  });
+  return true;
 }
 
-
-
-module.exports = {sendDailyFeedback, versandReady}
+module.exports = { sendDailyFeedback, versandReady };

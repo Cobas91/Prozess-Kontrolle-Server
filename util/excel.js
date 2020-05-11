@@ -13,24 +13,24 @@ function initExcel(data) {
   var dataCount = data.length;
   var db = new Datastore({
     filename: "DB/all.db",
-    autoload: true
+    autoload: true,
   });
   //Setting Headers for Worksheet
   worksheet.columns = [
     { header: "Timestamp", key: "timestamp", width: 10 },
     { header: "Key", key: "key", width: 32 },
     { header: "Kunde", key: "kunde", width: 10 },
-    { header: "Resetted", key: "reset", width: 10 }
+    { header: "Resetted", key: "reset", width: 10 },
   ];
   //Loop through Data and put it in the Worksheet
-  data.forEach(element => {
+  data.forEach((element) => {
     var cTime = time.convert(element.timestamp);
     try {
       worksheet.addRow({
         timestamp: cTime,
         key: element.data.sn,
         kunde: element.data.kunde,
-        reset: element.resetCount
+        reset: element.resetCount,
       });
     } catch (error) {
       console.log(error);
@@ -39,7 +39,7 @@ function initExcel(data) {
       { _id: element._id },
       { $set: { path: downloadPath } },
       {},
-      function(err, numReplaced) {
+      function (err, numReplaced) {
         if (err) {
           console.log(err.message);
         }
@@ -50,7 +50,7 @@ function initExcel(data) {
     );
   });
   //Write File after all Data has parsed
-  workbook.xlsx.writeFile(`export/${filename}`).then(function() {
+  workbook.xlsx.writeFile(`export/${filename}`).then(function () {
     console.log(`Saved as ${filename}`);
   });
   return { pfad: downloadPath, counts: dataCount };

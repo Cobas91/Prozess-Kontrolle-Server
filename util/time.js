@@ -12,7 +12,7 @@ function convert(UNIX_timestamp, format) {
     "September",
     "Oktober",
     "November",
-    "Dezember"
+    "Dezember",
   ];
   var year = a.getFullYear();
   var month = months[a.getMonth()];
@@ -24,20 +24,19 @@ function convert(UNIX_timestamp, format) {
     sec = ("0" + sec).slice(-2);
   }
   var time;
-  switch(format){
+  switch (format) {
     case "DD MM JJ":
-      time = `${date}.${month}.${year}`
+      time = `${date}.${month}.${year}`;
       break;
     case "DD MM":
-      time = `${date}.${month}`
+      time = `${date}.${month}`;
       break;
     case "DD MM JJ mm":
-      time = `${date}.${month}.${year} - ${hour}:${min}:${sec}`
+      time = `${date}.${month}.${year} - ${hour}:${min}:${sec}`;
       break;
-      case "DD MM HH mm":
-      time = `${date}.${month}.${year} - ${hour}:${min} Uhr`
+    case "DD MM HH mm":
+      time = `${date}.${month}.${year} - ${hour}:${min} Uhr`;
       break;
-
   }
 
   return time;
