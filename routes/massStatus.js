@@ -9,36 +9,40 @@ router.post("/massStatus", async ({ body }, response) => {
   const systeme = body.systeme;
   const bemerkung = body.bemerkung;
   const straße = body.Straße;
+  const kunde = body.Kunde;
   var notFound = [];
   var found = [];
   var message = "success";
-  if (statusToSet === "") {
-    message = "Kein Status ausgewählt!";
-  } else {
-    for (var property in systeme) {
-      if (systeme.hasOwnProperty(property)) {
-        var systemToInsert = systeme[property];
-        exist = await db.select("systeme", { SN: systemToInsert });
-        if (exist.length > 0) {
+  for (var property in systeme) {
+    if (systeme.hasOwnProperty(property)) {
+      var systemToInsert = systeme[property];
+      exist = await db.select("systeme", { SN: systemToInsert });
+      if (exist.length > 0) {
+        if (statusToSet != "") {
           status.update(systemToInsert, statusToSet);
-          if (bemerkung != "") {
-            db.insert("comments_systeme", {
-              system_ID: exist[0].ID,
-              comment: bemerkung,
-            });
-          }
-          db.update(
-            "systeme",
-            { Bemerkung: bemerkung, Straße: straße },
-            { SN: systemToInsert }
-          );
-          found.push(systemToInsert);
-        } else {
-          notFound.push(systemToInsert);
         }
+        if (bemerkung != "") {
+          db.insert("comments_systeme", {
+            system_ID: exist[0].ID,
+            comment: bemerkung,
+          });
+        }
+        db.update(
+          "systeme",
+          {
+            Bemerkung: bemerkung,
+            Straße: straße,
+            Kunde: kunde ? kunde : exist[0].Kunde,
+          },
+          { SN: systemToInsert }
+        );
+        found.push(systemToInsert);
+      } else {
+        notFound.push(systemToInsert);
       }
     }
   }
+
   response.send({
     success: found,
     error: notFound,
