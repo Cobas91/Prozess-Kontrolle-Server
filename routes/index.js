@@ -23,4 +23,6 @@ router.use("/db", require("./getDBlogs.js"));
 router.use("/db", require("./sendMessageTeams.js"));
 router.use("/db", require("./getVersandReady.js"));
 router.use("/db", require("./login.js"));
+router.use("/db", require("./getAllStraßen.js"));
+router.use("/db", require("./getHierarchie.js"));
 module.exports = router;

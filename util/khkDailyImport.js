@@ -32,14 +32,38 @@ cronJob.scheduleJob(
     await khkImportLieferscheine(filepathLieferscheine);
   }
 );
-
+// PowerBI Export Checklisten
+// _________________________________________________________________________________________________
 cronJob.scheduleJob(
   `${config.PowerBI.time.sekunde} ${config.PowerBI.time.minute} ${config.PowerBI.time.stunde} * * *`,
   async function () {
     console.log(
-      `Aufgabe PowerBI export um ${config.PowerBI.time.stunde}:${config.PowerBI.time.minute} Uhr gestartet.`
+      `Aufgabe PowerBIexport Checklisten um ${config.PowerBI.time.stunde}:${config.PowerBI.time.minute} Uhr gestartet.`
     );
-    await exportPowerBI();
+    await exportPowerBIChecklisten();
+  }
+);
+
+// PowerBI Export Systeme
+// _________________________________________________________________________________________________
+cronJob.scheduleJob(
+  `${config.PowerBI.time.sekunde} ${config.PowerBI.time.minute} ${config.PowerBI.time.stunde} * * *`,
+  async function () {
+    console.log(
+      `Aufgabe PowerBIexport Systeme um ${config.PowerBI.time.stunde}:${config.PowerBI.time.minute} Uhr gestartet.`
+    );
+    await exportPowerBISysteme();
+  }
+);
+// PowerBI Export Status
+// _________________________________________________________________________________________________
+cronJob.scheduleJob(
+  `${config.PowerBI.time.sekunde} ${config.PowerBI.time.minute} ${config.PowerBI.time.stunde} * * *`,
+  async function () {
+    console.log(
+      `Aufgabe PowerBIexport Status um ${config.PowerBI.time.stunde}:${config.PowerBI.time.minute} Uhr gestartet.`
+    );
+    await exportPowerBIStatus();
   }
 );
 
@@ -53,51 +77,77 @@ cronJob.scheduleJob(
   }
 );
 
-async function exportPowerBI() {
+async function exportPowerBIChecklisten() {
   const checklisten = config.PowerBI.checklisten;
-  const systeme = config.PowerBI.systeme;
-  const status = config.PowerBI.status;
-
-  // Checklisten
-  var query_checklisten = `
-  SELECT ${checklisten.header} UNION ALL 
-  SELECT * FROM ${checklisten.table} INTO OUTFILE '${checklisten.pfad}${checklisten.file}' FIELDS TERMINATED BY '${checklisten.query.Fields_Termitated}' ENCLOSED BY '${checklisten.query.Enclosed_By}' ESCAPED BY '${checklisten.query.Escaped_by}' LINES TERMINATED BY '${checklisten.query.Lines_Terminated}'
-  `;
-  var erg_checklisten = await db.query(query_checklisten).then(function (res) {
-    fs.createReadStream(`${checklisten.pfad}${checklisten.file}`).pipe(
-      fs.createWriteStream(`${checklisten.pfad}${checklisten.powerBIFile}`)
-    );
-    fs.unlinkSync(`${checklisten.pfad}${checklisten.file}`);
+  if (checklisten.active) {
+    var query_checklisten = `
+    SELECT ${checklisten.header} UNION ALL 
+    SELECT * FROM ${checklisten.table} INTO OUTFILE '${checklisten.pfad}${checklisten.file}' FIELDS TERMINATED BY '${checklisten.query.Fields_Termitated}' ENCLOSED BY '${checklisten.query.Enclosed_By}' ESCAPED BY '${checklisten.query.Escaped_by}' LINES TERMINATED BY '${checklisten.query.Lines_Terminated}'
+    `;
+    var erg_checklisten = await db
+      .query(query_checklisten)
+      .then(function (res) {
+        fs.createReadStream(`${checklisten.pfad}${checklisten.file}`).pipe(
+          fs.createWriteStream(`${checklisten.pfad}${checklisten.powerBIFile}`)
+        );
+        fs.unlinkSync(`${checklisten.pfad}${checklisten.file}`);
+        log.add(
+          `Job: PowerBI Export Checklisten done ` + new Date().toLocaleString()
+        );
+      });
+  } else {
     log.add(
-      `Job: PowerBI Export Checklisten done ` + new Date().toLocaleString()
+      `Job: PowerBI Export Checklisten is disabled ` +
+        new Date().toLocaleString()
     );
-  });
-
-  // Systeme
-  var query_systeme = `
-  SELECT ${systeme.header} UNION ALL 
-  SELECT * FROM ${systeme.table} INTO OUTFILE '${systeme.pfad}${systeme.file}' FIELDS TERMINATED BY '${systeme.query.Fields_Termitated}' ENCLOSED BY '${systeme.query.Enclosed_By}' ESCAPED BY '${systeme.query.Escaped_by}' LINES TERMINATED BY '${systeme.query.Lines_Terminated}'
-  `;
-  var erg_systeme = await db.query(query_systeme).then(function (res) {
-    fs.createReadStream(`${systeme.pfad}${systeme.file}`).pipe(
-      fs.createWriteStream(`${systeme.pfad}${systeme.powerBIFile}`)
+  }
+}
+async function exportPowerBISysteme() {
+  const systeme = config.PowerBI.systeme;
+  if (systeme.active) {
+    var query_systeme = `
+    SELECT ${systeme.header} UNION ALL 
+    SELECT * FROM ${systeme.table} INTO OUTFILE '${systeme.pfad}${systeme.file}' FIELDS TERMINATED BY '${systeme.query.Fields_Termitated}' ENCLOSED BY '${systeme.query.Enclosed_By}' ESCAPED BY '${systeme.query.Escaped_by}' LINES TERMINATED BY '${systeme.query.Lines_Terminated}'
+    `;
+    var erg_systeme = await db.query(query_systeme).then(function (res) {
+      fs.createReadStream(`${systeme.pfad}${systeme.file}`).pipe(
+        fs.createWriteStream(`${systeme.pfad}${systeme.powerBIFile}`)
+      );
+      fs.unlinkSync(`${systeme.pfad}${systeme.file}`);
+      log.add(
+        `Job: PowerBI Export Systeme done ` + new Date().toLocaleString()
+      );
+    });
+  } else {
+    log.add(
+      `Job: PowerBI Export Systeme is disabled ` + new Date().toLocaleString()
     );
-    fs.unlinkSync(`${systeme.pfad}${systeme.file}`);
-    log.add(`Job: PowerBI Export Systeme done ` + new Date().toLocaleString());
-  });
-
-  // Status
-  var query_status = `
+  }
+}
+async function exportPowerBIStatus() {
+  const status = config.PowerBI.status;
+  if (status.active) {
+    var query_status = `
   SELECT ${status.header} UNION ALL 
   SELECT * FROM ${status.table} INTO OUTFILE '${status.pfad}${status.file}' FIELDS TERMINATED BY '${status.query.Fields_Termitated}' ENCLOSED BY '${status.query.Enclosed_By}' ESCAPED BY '${status.query.Escaped_by}' LINES TERMINATED BY '${status.query.Lines_Terminated}'
   `;
-  var erg_status = await db.query(query_status).then(function (res) {
-    fs.createReadStream(`${status.pfad}${status.file}`).pipe(
-      fs.createWriteStream(`${status.pfad}${status.powerBIFile}`)
+    var erg_status = await db.query(query_status).then(function (res) {
+      fs.createReadStream(`${status.pfad}${status.file}`).pipe(
+        fs.createWriteStream(`${status.pfad}${status.powerBIFile}`)
+      );
+      fs.unlinkSync(`${status.pfad}${status.file}`);
+      log.add(`Job: PowerBI Export Status done ` + new Date().toLocaleString());
+    });
+  } else {
+    log.add(
+      `Job: PowerBI Export Status is disabled ` + new Date().toLocaleString()
     );
-    fs.unlinkSync(`${status.pfad}${status.file}`);
-    log.add(`Job: PowerBI Export Status done ` + new Date().toLocaleString());
-  });
+  }
+}
+async function exportPowerBI() {
+  await exportPowerBIChecklisten();
+  await exportPowerBIStatus();
+  await exportPowerBISysteme();
 }
 
 async function dailyFeedback(channel) {

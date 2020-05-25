@@ -8,6 +8,7 @@ router.post("/update", async ({ body }, response) => {
   const table = body.table;
   const where = body.where;
   const set = body.set;
+  delete set.lastChange;
   var systemToInsert = await db.select("systeme", { SN: set.SN });
 
   //Wenn der Datensatz dem Datensatz aus DB entspricht, nichts unternehmen.

@@ -78,16 +78,19 @@ router.post("/set", async (request, response) => {
       },
       checklisten: {
         ...config.PowerBI.checklisten,
+        active: body.powerbi_checklisten_active,
         powerBIFile: PowerBI_Checklisten_file,
         pfad: PowerBI_Checklisten_pfad,
       },
       systeme: {
         ...config.PowerBI.systeme,
+        active: body.powerbi_systeme_active,
         powerBIFile: PowerBI_Systeme_file,
         pfad: PowerBI_Systeme_pfad,
       },
       status: {
         ...config.PowerBI.status,
+        active: body.powerbi_status_active,
         powerBIFile: PowerBI_Status_file,
         pfad: PowerBI_Status_pfad,
       },
