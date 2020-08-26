@@ -25,4 +25,5 @@ router.use("/db", require("./getVersandReady.js"));
 router.use("/db", require("./login.js"));
 router.use("/db", require("./getAllStraßen.js"));
 router.use("/db", require("./getHierarchie.js"));
+router.use("/db", require("./clearupDB.js"));
 module.exports = router;
