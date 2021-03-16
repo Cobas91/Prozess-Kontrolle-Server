@@ -1,6 +1,6 @@
 module.exports = {
-    username: "dgsccm",
-    datenbank: "dg_sccm",
-    passwort: "dgsccm",
+    username: "USERNAME",
+    datenbank: "DATENBANK",
+    passwort: "PASSWORD",
     port: 3306
 }
