@@ -2,9 +2,9 @@
 Es muss die Datei dbzugang.js im Hauptverzeichnis liegen.<br>
 Diese muss wiefolgt aussehen<br>
 `module.exports = {
-    datenbank: "dg_sccm",
-    username: "dg",
-    passwort: "Datagroup",
+    datenbank: "DBNAME",
+    username: "USERNAME",
+    passwort: "PASSWORD",
     port: 3306
 }`<br>
 Die Angben müssen entsprechend angepasst werden<br>
