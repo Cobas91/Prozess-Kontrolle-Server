@@ -59,9 +59,9 @@
       "channel": "Dev"
     },
     "channels": {
-      "Dev": "https://outlook.office.com/webhook/a52475c8-9914-404c-a1e1-cc73c9c8eef9@a1eb347b-8084-411c-b81a-c60eb204db5d/IncomingWebhook/bcfc49b81ad34c2099814e1f5dcbe649/7ece8439-16bc-4a61-a671-abc483a88f97",
-      "Allgemein": "https://outlook.office.com/webhook/a52475c8-9914-404c-a1e1-cc73c9c8eef9@a1eb347b-8084-411c-b81a-c60eb204db5d/IncomingWebhook/2c11d82b33594fc38cf65b05213f5fe2/7ece8439-16bc-4a61-a671-abc483a88f97",
-      "Betankungsservice": "https://outlook.office.com/webhook/a52475c8-9914-404c-a1e1-cc73c9c8eef9@a1eb347b-8084-411c-b81a-c60eb204db5d/IncomingWebhook/988dede2046f4e5187b3069a2dee5c7e/7ece8439-16bc-4a61-a671-abc483a88f97"
+      "Dev": "https://outlook.office.com/webhook/c60eb204db5d/IncomingWebhook/bcfc49b81ad34c2099814e1f5dcbe649/7ece8439-16bc-4a61-a671-abc483a88f97",
+      "Allgemein": "https://outlook.office.com/webhook/b81a-c60eb204db5d/IncomingWebhook/2c11d82b33594fc38cf65b05213f5fe2/7ece8439-16bc-4a61-a671-abc483a88f97",
+      "Betankungsservice": "https://outlook.office.com/webhook/b81a-c60eb204db5d/IncomingWebhook/988dede2046f4e5187b3069a2dee5c7e/7ece8439-16bc-4a61-a671-abc483a88f97"
     }
   },
   "development": false
